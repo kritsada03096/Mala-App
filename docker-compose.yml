@@ -1,0 +1,21 @@
+# Reserved for later. No service starts without the future-db profile.
+# This file is never invoked by the frontend or backend.
+services:
+  postgres:
+    image: postgres:17
+    profiles: [future-db]
+    environment:
+      POSTGRES_DB: mala_shop
+      POSTGRES_USER: mala
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local-demo-only}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - mala_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U mala -d mala_shop"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  mala_postgres:
